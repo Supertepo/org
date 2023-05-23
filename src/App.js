@@ -16,6 +16,7 @@ function App() {
       foto: "https://github.com/harlandlohora.png",
       nombre: "Harland Lohora",
       puesto: "Instructor",
+      fav: true
     },
     {
       id: uuid(),
@@ -23,6 +24,7 @@ function App() {
       foto: "https://github.com/genesysaluralatam.png",
       nombre: "Genesys Rondón",
       puesto: "Desarrolladora de software e instructora",
+      fav: false
     },
     {
       id: uuid(),
@@ -30,6 +32,7 @@ function App() {
       foto: "https://github.com/JeanmarieAluraLatam.png",
       nombre: "Jeanmarie Quijada",
       puesto: "Instructora en Alura Latam",
+      fav: false
     },
     {
       id: uuid(),
@@ -37,6 +40,7 @@ function App() {
       foto: "https://github.com/christianpva.png",
       nombre: "Christian Velasco",
       puesto: "Head de Alura e Instructor",
+      fav: false
     },
     {
       id: uuid(),
@@ -44,6 +48,7 @@ function App() {
       foto: "https://github.com/JoseDarioGonzalezCha.png",
       nombre: "Jose Gonzalez",
       puesto: "Dev FullStack",
+      fav: false
     },
   ]);
   const [equipos,actualizarEquipos] = useState([
@@ -100,21 +105,18 @@ function App() {
 
   //Registrar colaborador
   const registrarColaborador = (colaborador) => {
-    console.log("Nuevo colaborador", colaborador);
     //spread operator
     actualizarColaboradores([...colaboradores, colaborador]);
   };
 
   //Eliminar colaborador
   const eliminarColaborador = (id) => {
-    console.log("Eliminar colaborador",id)
     const nuevosColaboradores = colaboradores.filter((colaborador) => colaborador.id !== id)
     actualizarColaboradores(nuevosColaboradores)
   };
 
   //Actualizar color de equipo
   const actualizarColor = (color, id) => {
-    console.log("Actualizar: ", color, id);
     const equiposActualizados = equipos.map((equipo) => {
       if(equipo.id === id){
         equipo.colorPrimario = color
@@ -125,6 +127,22 @@ function App() {
     actualizarEquipos(equiposActualizados)
   };
 
+  //Crear equipo
+  const crearEquipo = (nuevoEquipo) => {
+    actualizarEquipos([...equipos, {...nuevoEquipo,id: uuid()}])
+  }
+
+  const like = (id) => {
+    console.log("Like",id)
+    const colaboradoresActualizados = colaboradores.map((colaborador) => {
+      if(colaborador.id === id){
+        colaborador.fav = !colaborador.fav
+      }
+      return colaborador
+    })
+    actualizarColaboradores(colaboradoresActualizados)
+  }
+
   return (
     <div>
       <Header />
@@ -133,6 +151,7 @@ function App() {
         <Formulario
           equipos={equipos.map((equipo) => equipo.titulo)}
           registrarColaborador={registrarColaborador}
+          crearEquipo={crearEquipo}
         />
       )}
 
@@ -146,6 +165,7 @@ function App() {
           )}
           eliminarColaborador={eliminarColaborador}
           actualizarColor={actualizarColor}
+          like={like}
         />
       ))}
       <Footer />
